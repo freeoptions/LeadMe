@@ -1,0 +1,395 @@
+{
+  "formatVersion": 1,
+  "database": {
+    "version": 1,
+    "identityHash": "a20f384b6b8700ebbe72e86d384b2f3e",
+    "entities": [
+      {
+        "tableName": "homes",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` TEXT NOT NULL, `name` TEXT NOT NULL, `archived_at` INTEGER, `created_at` INTEGER NOT NULL, `updated_at` INTEGER NOT NULL, PRIMARY KEY(`id`))",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "name",
+            "columnName": "name",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "archivedAt",
+            "columnName": "archived_at",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "createdAt",
+            "columnName": "created_at",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "updatedAt",
+            "columnName": "updated_at",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": false,
+          "columnNames": [
+            "id"
+          ]
+        }
+      },
+      {
+        "tableName": "road_segments",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` TEXT NOT NULL, `home_id` TEXT NOT NULL, `start_x` REAL NOT NULL, `start_y` REAL NOT NULL, `end_x` REAL NOT NULL, `end_y` REAL NOT NULL, PRIMARY KEY(`id`), FOREIGN KEY(`home_id`) REFERENCES `homes`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE )",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "homeId",
+            "columnName": "home_id",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "startX",
+            "columnName": "start_x",
+            "affinity": "REAL",
+            "notNull": true
+          },
+          {
+            "fieldPath": "startY",
+            "columnName": "start_y",
+            "affinity": "REAL",
+            "notNull": true
+          },
+          {
+            "fieldPath": "endX",
+            "columnName": "end_x",
+            "affinity": "REAL",
+            "notNull": true
+          },
+          {
+            "fieldPath": "endY",
+            "columnName": "end_y",
+            "affinity": "REAL",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": false,
+          "columnNames": [
+            "id"
+          ]
+        },
+        "indices": [
+          {
+            "name": "index_road_segments_home_id",
+            "unique": false,
+            "columnNames": [
+              "home_id"
+            ],
+            "orders": [],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_road_segments_home_id` ON `${TABLE_NAME}` (`home_id`)"
+          }
+        ],
+        "foreignKeys": [
+          {
+            "table": "homes",
+            "onDelete": "CASCADE",
+            "onUpdate": "NO ACTION",
+            "columns": [
+              "home_id"
+            ],
+            "referencedColumns": [
+              "id"
+            ]
+          }
+        ]
+      },
+      {
+        "tableName": "metro_stations",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` TEXT NOT NULL, `home_id` TEXT NOT NULL, `name` TEXT NOT NULL, PRIMARY KEY(`id`), FOREIGN KEY(`home_id`) REFERENCES `homes`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE )",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "homeId",
+            "columnName": "home_id",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "name",
+            "columnName": "name",
+            "affinity": "TEXT",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": false,
+          "columnNames": [
+            "id"
+          ]
+        },
+        "indices": [
+          {
+            "name": "index_metro_stations_home_id",
+            "unique": false,
+            "columnNames": [
+              "home_id"
+            ],
+            "orders": [],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_metro_stations_home_id` ON `${TABLE_NAME}` (`home_id`)"
+          },
+          {
+            "name": "index_metro_stations_home_id_name",
+            "unique": true,
+            "columnNames": [
+              "home_id",
+              "name"
+            ],
+            "orders": [],
+            "createSql": "CREATE UNIQUE INDEX IF NOT EXISTS `index_metro_stations_home_id_name` ON `${TABLE_NAME}` (`home_id`, `name`)"
+          }
+        ],
+        "foreignKeys": [
+          {
+            "table": "homes",
+            "onDelete": "CASCADE",
+            "onUpdate": "NO ACTION",
+            "columns": [
+              "home_id"
+            ],
+            "referencedColumns": [
+              "id"
+            ]
+          }
+        ]
+      },
+      {
+        "tableName": "metro_exits",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` TEXT NOT NULL, `station_id` TEXT NOT NULL, `code` TEXT NOT NULL, `x` REAL NOT NULL, `y` REAL NOT NULL, `note` TEXT, PRIMARY KEY(`id`), FOREIGN KEY(`station_id`) REFERENCES `metro_stations`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE )",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "stationId",
+            "columnName": "station_id",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "code",
+            "columnName": "code",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "x",
+            "columnName": "x",
+            "affinity": "REAL",
+            "notNull": true
+          },
+          {
+            "fieldPath": "y",
+            "columnName": "y",
+            "affinity": "REAL",
+            "notNull": true
+          },
+          {
+            "fieldPath": "note",
+            "columnName": "note",
+            "affinity": "TEXT"
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": false,
+          "columnNames": [
+            "id"
+          ]
+        },
+        "indices": [
+          {
+            "name": "index_metro_exits_station_id",
+            "unique": false,
+            "columnNames": [
+              "station_id"
+            ],
+            "orders": [],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_metro_exits_station_id` ON `${TABLE_NAME}` (`station_id`)"
+          },
+          {
+            "name": "index_metro_exits_station_id_code",
+            "unique": true,
+            "columnNames": [
+              "station_id",
+              "code"
+            ],
+            "orders": [],
+            "createSql": "CREATE UNIQUE INDEX IF NOT EXISTS `index_metro_exits_station_id_code` ON `${TABLE_NAME}` (`station_id`, `code`)"
+          }
+        ],
+        "foreignKeys": [
+          {
+            "table": "metro_stations",
+            "onDelete": "CASCADE",
+            "onUpdate": "NO ACTION",
+            "columns": [
+              "station_id"
+            ],
+            "referencedColumns": [
+              "id"
+            ]
+          }
+        ]
+      },
+      {
+        "tableName": "bus_platforms",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` TEXT NOT NULL, `home_id` TEXT NOT NULL, `name` TEXT NOT NULL, `direction_label` TEXT NOT NULL, `x` REAL NOT NULL, `y` REAL NOT NULL, `note` TEXT, PRIMARY KEY(`id`), FOREIGN KEY(`home_id`) REFERENCES `homes`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE )",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "homeId",
+            "columnName": "home_id",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "name",
+            "columnName": "name",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "directionLabel",
+            "columnName": "direction_label",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "x",
+            "columnName": "x",
+            "affinity": "REAL",
+            "notNull": true
+          },
+          {
+            "fieldPath": "y",
+            "columnName": "y",
+            "affinity": "REAL",
+            "notNull": true
+          },
+          {
+            "fieldPath": "note",
+            "columnName": "note",
+            "affinity": "TEXT"
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": false,
+          "columnNames": [
+            "id"
+          ]
+        },
+        "indices": [
+          {
+            "name": "index_bus_platforms_home_id",
+            "unique": false,
+            "columnNames": [
+              "home_id"
+            ],
+            "orders": [],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_bus_platforms_home_id` ON `${TABLE_NAME}` (`home_id`)"
+          }
+        ],
+        "foreignKeys": [
+          {
+            "table": "homes",
+            "onDelete": "CASCADE",
+            "onUpdate": "NO ACTION",
+            "columns": [
+              "home_id"
+            ],
+            "referencedColumns": [
+              "id"
+            ]
+          }
+        ]
+      },
+      {
+        "tableName": "app_state",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER NOT NULL, `current_home_id` TEXT, PRIMARY KEY(`id`), FOREIGN KEY(`current_home_id`) REFERENCES `homes`(`id`) ON UPDATE NO ACTION ON DELETE SET NULL )",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "currentHomeId",
+            "columnName": "current_home_id",
+            "affinity": "TEXT"
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": false,
+          "columnNames": [
+            "id"
+          ]
+        },
+        "indices": [
+          {
+            "name": "index_app_state_current_home_id",
+            "unique": false,
+            "columnNames": [
+              "current_home_id"
+            ],
+            "orders": [],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_app_state_current_home_id` ON `${TABLE_NAME}` (`current_home_id`)"
+          }
+        ],
+        "foreignKeys": [
+          {
+            "table": "homes",
+            "onDelete": "SET NULL",
+            "onUpdate": "NO ACTION",
+            "columns": [
+              "current_home_id"
+            ],
+            "referencedColumns": [
+              "id"
+            ]
+          }
+        ]
+      }
+    ],
+    "setupQueries": [
+      "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'a20f384b6b8700ebbe72e86d384b2f3e')"
+    ]
+  }
+}
